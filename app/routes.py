@@ -1,17 +1,13 @@
-from flask import Flask, render_template, request, redirect, url_for, session
+from flask import Flask, render_template, request, redirect, url_for, session, Blueprint
+from werkzeug.security import check_password_hash, generate_password_hash
+from app.core.manager.thread_manager import Manager
+from app.models import Item, User
+from . import db
+bp = Blueprint('main', __name__)
 
-@app.route('/')
-def dashboard():
-    if 'user_id' in session:
-        user_id = session['user_id']
-        user = User.query.get(user_id)
-        items = Item.query.all()
-        return render_template('dashboard.html', user=user,items = items)
-    else:
-        return redirect(url_for('login'))
+thread_manager = Manager()
 
-
-@app.route('/login', methods=['GET', 'POST'])
+@bp.route('/login', methods=['GET', 'POST'])
 def login():
     if request.method == 'POST':
         username = request.form['user_name']
@@ -24,32 +20,24 @@ def login():
     return render_template('login.html')
 
 
-@app.route('/logout')
+@bp.route('/logout')
 def logout():
     session.pop('user_id', None)
     return redirect(url_for('login'))
 
 
-@app.route('/edit/<string:item_id>', methods=['GET', 'POST'])
-def edit_item(item_id):
-    item = Item.query.get_or_404(item_id)
-    if request.method == 'POST':
-        item.name = request.form['new_item_name']
-        item.password = request.form['new_password']
-        item.message = request.form['new_message']
-        item.did = request.form['new_did']
-        item.call_duration = request.form['new_call_duration']
-        item.timezone_diff = request.form['new_timezone_diff']
-        item.active = False
-        item.running = False
-        if item_id in threads.keys():
-            threads[item_id].stop()
-        db.session.commit()
-        return redirect(url_for('dashboard'))
+@bp.route('/')
+def dashboard():
+    if 'user_id' in session:
+        user_id = session['user_id']
+        user = User.query.get(user_id)
+        items = Item.query.all()
+        return render_template('dashboard.html', user=user,items = items)
+    else:
+        return redirect(url_for('login'))
+    
 
-    return render_template('edit.html', item=item)
-
-@app.route('/create/', methods=['POST','GET'])
+@bp.route('/create/', methods=['POST','GET'])
 def create_item():
     if request.method == 'POST':
         name = request.form['name']
@@ -76,20 +64,28 @@ def create_item():
         return redirect(url_for('dashboard'))
     else:
         return render_template('create.html')
+    
 
-
-
-@app.route('/delete/<string:item_id>', methods=['POST'])
-def delete_item(item_id):
+@bp.route('/edit/<string:item_id>', methods=['GET', 'POST'])
+def edit_item(item_id):
     item = Item.query.get_or_404(item_id)
-    if item_id in threads.keys():
-        threads[item_id].stop()
-    db.session.delete(item)
-    db.session.commit()
-    return redirect(url_for('dashboard'))
+    if request.method == 'POST':
+        item.name = request.form['new_item_name']
+        item.password = request.form['new_password']
+        item.message = request.form['new_message']
+        item.did = request.form['new_did']
+        item.call_duration = request.form['new_call_duration']
+        item.timezone_diff = request.form['new_timezone_diff']
+        item.active = False
+        item.running = False
+        thread_manager.remove_thread(item_id)
+        db.session.commit()
+        return redirect(url_for('dashboard'))
+
+    return render_template('edit.html', item=item)
 
 
-@app.route('/run_item/<item_id>', methods=['POST'])
+@bp.route('/run_item/<item_id>', methods=['POST'])
 def run_item(item_id):
     # Define the function to be executed in a separate thread
     item = Item.query.get_or_404(item_id)
@@ -97,16 +93,20 @@ def run_item(item_id):
     if request.method == 'POST' and not item.active:
         item.active = True
         item.running = True
-
-        # Store the reference to the thread in the dictionary
-        threads[item_id] = Run(item)
-        db.session.commit()
+        thread_manager.add_thread(item_id,item)
 
     else:
         item.active = False
         item.running = False
-        threads[item_id].stop()
-        del threads[item_id]
+        thread_manager.remove_thread(item_id)
 
+    db.session.commit()
+    return redirect(url_for('dashboard'))
+
+@bp.route('/delete/<string:item_id>', methods=['POST'])
+def delete_item(item_id):
+    item = Item.query.get_or_404(item_id)
+    thread_manager.remove_thread(item_id)
+    db.session.delete(item)
     db.session.commit()
     return redirect(url_for('dashboard'))
