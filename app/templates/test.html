@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Header with Rounded Borders</title>
+    <style>
+      body {
+        margin: 0;
+        padding: 1%;
+        font-family: Arial, sans-serif;
+      }
+      .header {
+        background-color: #343a40;
+        color: white;
+        padding: 40px;
+        border-radius: 20px;
+        transition: all 0.3s ease;
+        margin: 0;
+      }
+      .header:hover {
+        transform: translate(5px, 5px);
+      }
+      .nav-item {
+        display: inline-block;
+        margin-right: 40px;
+        transition: all 0.3s ease;
+        text-decoration: none; /* Remove underline */
+        color: white; /* Set color to white */
+        font-size: x-large;
+        font-weight: 700;
+        padding-right: 20px;
+      }
+      .nav-item:hover {
+        transform: translate(10px, 10px);
+      }
+    </style>
+  </head>
+  <body>
+    <header class="header">
+      <nav>
+        <a href="#" class="nav-item">Dashboard</a>
+        <a href="#" class="nav-item" style="position: absolute; right: 0"
+          >Logout</a
+        >
+      </nav>
+    </header>
+  </body>
+</html>

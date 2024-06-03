@@ -15,7 +15,7 @@ def login():
         user = User.query.filter_by(username=username).first()
         if user and check_password_hash(user.password, password):
             session['user_id'] = user.id
-            return redirect(url_for('dashboard'))
+            return redirect(url_for('main.dashboard'))
     
     return render_template('login.html')
 
@@ -23,7 +23,7 @@ def login():
 @bp.route('/logout')
 def logout():
     session.pop('user_id', None)
-    return redirect(url_for('login'))
+    return redirect(url_for('main.login'))
 
 
 @bp.route('/')
@@ -34,9 +34,8 @@ def dashboard():
         items = Item.query.all()
         return render_template('dashboard.html', user=user,items = items)
     else:
-        return redirect(url_for('login'))
+        return redirect(url_for('main.login'))
     
-
 @bp.route('/create/', methods=['POST','GET'])
 def create_item():
     if request.method == 'POST':
@@ -61,7 +60,7 @@ def create_item():
         db.session.add(new_item)
         db.session.commit()
         
-        return redirect(url_for('dashboard'))
+        return redirect(url_for('main.dashboard'))
     else:
         return render_template('create.html')
     
@@ -80,7 +79,7 @@ def edit_item(item_id):
         item.running = False
         thread_manager.remove_thread(item_id)
         db.session.commit()
-        return redirect(url_for('dashboard'))
+        return redirect(url_for('main.dashboard'))
 
     return render_template('edit.html', item=item)
 
@@ -101,7 +100,7 @@ def run_item(item_id):
         thread_manager.remove_thread(item_id)
 
     db.session.commit()
-    return redirect(url_for('dashboard'))
+    return redirect(url_for('main.dashboard'))
 
 @bp.route('/delete/<string:item_id>', methods=['POST'])
 def delete_item(item_id):
@@ -109,4 +108,4 @@ def delete_item(item_id):
     thread_manager.remove_thread(item_id)
     db.session.delete(item)
     db.session.commit()
-    return redirect(url_for('dashboard'))
+    return redirect(url_for('main.dashboard'))

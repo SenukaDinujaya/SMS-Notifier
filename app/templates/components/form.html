@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Stylish Table</title>
+    <link
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <style>
+      .stylish-table {
+        width: 100%;
+        margin-bottom: 1rem;
+        color: #212529;
+        border-collapse: collapse;
+      }
+      .stylish-table thead {
+        background-color: #343a40;
+        color: #fff;
+        cursor: pointer;
+      }
+      .stylish-table th,
+      .stylish-table td {
+        padding: 0.75rem;
+        vertical-align: middle;
+        border-top: 1px solid #dee2e6;
+        transition: background-color 0.3s ease;
+      }
+      .stylish-table tbody tr:nth-of-type(even) {
+        background-color: #f8f9fa;
+      }
+      .stylish-table tbody tr:hover {
+        background-color: rgba(0, 0, 0, 0.075);
+      }
+    </style>
+  </head>
+  <body>
+    <table class="table stylish-table">
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>First Name</th>
+          <th>Last Name</th>
+          <th>Username</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>1</td>
+          <td>John</td>
+          <td>Doe</td>
+          <td>@john.doe</td>
+        </tr>
+        <tr>
+          <td>2</td>
+          <td>Jane</td>
+          <td>Doe</td>
+          <td>@jane.doe</td>
+        </tr>
+        <tr>
+          <td>3</td>
+          <td>Mark</td>
+          <td>Smith</td>
+          <td>@mark.smith</td>
+        </tr>
+        <tr>
+          <td>4</td>
+          <td>Lisa</td>
+          <td>Johnson</td>
+          <td>@lisa.johnson</td>
+        </tr>
+        <tr>
+          <td>5</td>
+          <td>Michael</td>
+          <td>Brown</td>
+          <td>@michael.brown</td>
+        </tr>
+      </tbody>
+    </table>
+  </body>
+</html>

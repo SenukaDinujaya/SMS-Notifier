@@ -1,0 +1,47 @@
+<div class="container"></div>
+<table class="table stylish-table">
+  <thead class="move-on-hover">
+    <tr>
+      <th>Name</th>
+      <th>DID</th>
+      <th>Call Duration</th>
+      <th>Timezone Difference</th>
+      <th>Running</th>
+      <th>Active</th>
+      <th>Actions</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for item in items %}
+    <tr>
+      <td><strong>{{ item.name }}</strong></td> <!-- Bold the first column value -->
+      <td>{{ item.did }}</td>
+      <td>{{ item.call_duration }}</td>
+      <td>{{ item.timezone_diff }}</td>
+      <td>{{ "Yes" if item.running else "No" }}</td>
+      <td>{{ "Yes" if item.active else "No" }}</td>
+      <td>
+        <a href="{{ url_for('main.edit_item', item_id=item.name) }}"
+          >{%include 'components/buttons/edit.html' %}</a
+        >
+        <form
+          action="{{ url_for('main.run_item', item_id=item.name) }}"
+          method="POST"
+        >
+          <input type="hidden" name="item_id" value="{{ item.name }}" />
+          <!-- <button type="submit">{{ "Stop" if item.running else "Run" }}</button> -->
+        {% if item.running %}
+          {% include 'components/buttons/stop.html' %}
+        {% else %}
+          {% include 'components/buttons/run.html' %}
+        {% endif %}
+        </form>
+      </td>
+    </tr>
+    {% endfor %}
+  </tbody>
+  
+</table>
+</div>
+
+

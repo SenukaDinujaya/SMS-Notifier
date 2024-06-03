@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Edit Item</title>
+  </head>
+
+  <body>
+    <h1>Edit Item</h1>
+    <form method="POST">
+      <label for="new_name">Name:</label><br />
+      <input
+        type="text"
+        id="new_name"
+        name="new_item_name"
+        value="{{ item.name }}"
+      /><br />
+
+      <label for="new_password">Password:</label><br />
+      <input
+        type="password"
+        id="new_password"
+        name="new_password"
+        value="{{ item.password }}"
+      /><br />
+
+      <label for="new_message">Message:</label><br />
+      <textarea id="new_message" name="new_message">{{ item.message }}</textarea
+      ><br />
+
+      <label for="new_did">DID:</label><br />
+      <input
+        type="text"
+        id="new_did"
+        name="new_did"
+        value="{{ item.did }}"
+      /><br />
+
+      <label for="new_call_duration">Call Duration:</label><br />
+      <input
+        type="number"
+        id="new_call_duration"
+        name="new_call_duration"
+        value="{{ item.call_duration }}"
+      /><br />
+
+      <label for="new_timezone_diff">Timezone Difference:</label><br />
+      <input
+        type="number"
+        id="new_timezone_diff"
+        name="new_timezone_diff"
+        value="{{ item.timezone_diff }}"
+      /><br />
+
+      <input type="submit" value="Update" />
+    </form>
+
+    <form method="POST" action="/delete/{{ item.name}}">
+      <input type="hidden" name="_method" value="DELETE" />
+      <input type="submit" value="Delete" />
+    </form>
+  </body>
+</html>

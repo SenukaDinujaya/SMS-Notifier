@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Centered Form</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div>
+      <header class="header">
+        <div class="logo">
+          <a href="#dashboard">Dashboard</a>
+          <a href="#register">Register New</a>
+          <a href="#register">Logs</a>
+        </div>
+        <div class="nav-links">
+          <a href="#logout">Logout</a>
+        </div>
+      </header>
+    </div>
+
+    <div class="form-container">
+      <form>
+        <h2>Create New Account</h2>
+        <label for="email">Email Address:</label>
+        <input
+          required
+          type="email"
+          id="name"
+          placeholder="Enter the email address"
+        />
+        <br />
+        <label for="password">API Password:</label>
+        <input
+          required
+          type="password"
+          id="password"
+          placeholder="Enter the Password"
+        />
+        <br />
+        <label for="phone">DID Number:</label>
+        <input type="tel" id="did" placeholder="Enter phone number" />
+        <br />
+        <label for="call-duration">Call Duration:</label>
+        <input
+          type="number"
+          id="call_duration"
+          placeholder="Maximum call duration"
+        />
+        <br />
+        <label for="message">Message:</label>
+        <textarea
+          placeholder="Type the message to display upon the missed call"
+        ></textarea>
+        <br />
+        <button type="submit">Submit</button>
+      </form>
+    </div>
+  </body>
+</html>
