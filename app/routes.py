@@ -62,7 +62,7 @@ def create_item():
         
         return redirect(url_for('main.dashboard'))
     else:
-        return render_template('create.html')
+        return render_template('create_account.html')
     
 
 @bp.route('/edit/<string:item_id>', methods=['GET', 'POST'])

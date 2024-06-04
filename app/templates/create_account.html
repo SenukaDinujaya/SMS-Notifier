@@ -4,22 +4,10 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Centered Form</title>
-    <link rel="stylesheet" href="styles.css" />
+    <link rel="stylesheet" href="/static/styles.css" />
   </head>
   <body>
-    <div>
-      <header class="header">
-        <div class="logo">
-          <a href="#dashboard">Dashboard</a>
-          <a href="#register">Register New</a>
-          <a href="#register">Logs</a>
-        </div>
-        <div class="nav-links">
-          <a href="#logout">Logout</a>
-        </div>
-      </header>
-    </div>
-
+    {%include 'header.html' %}
     <div class="form-container">
       <form>
         <h2>Create New Account</h2>

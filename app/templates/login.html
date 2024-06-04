@@ -3,148 +3,22 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Login</title>
-    <link
-      href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
-      rel="stylesheet"
-    />
-    <link
-      rel="stylesheet"
-      href="https://cdn.jsdelivr.net/gh/creativetimofficial/tailwind-starter-kit/compiled-tailwind.min.css"
-    />
-    <style>
-      .label-style {
-        color: white;
-        font-size: larger;
-        font-weight: 600;
-      }
-
-      .box {
-        position: relative; /* Add position relative to enable absolute positioning for the button */
-        padding: 20px; /* Increased padding for a larger box */
-        border-radius: 16px; /* Adjusted border radius */
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Added box shadow */
-        transition: transform 0.2s ease-in-out; /* Added transition for hover effect */
-        background-color: #343a40;
-      }
-
-      .box:hover {
-        transform: translateY(-10px); /* Move the box up slightly on hover */
-        transform: translateX(5px);
-      }
-      .item-move {
-        transition: transform 0.2s ease-in-out;
-      }
-
-      .item-move:hover {
-        transform: translateY(-5px);
-      }
-      .form-container {
-        width: 40%; /* Take 30% of screen width */
-        margin: 0 auto; /* Center the container horizontally */
-        display: flex; /* Use flexbox */
-        justify-content: center; /* Center content horizontally */
-      }
-      #message {
-        padding: 10px; /* Add padding for better readability */
-        border: 1px solid #ccc; /* Add a border for visual separation */
-        border-radius: 5px; /* Add rounded corners for a softer look */
-        resize: vertical; /* Allow vertical resizing */
-        font-family: Arial, sans-serif; /* Set preferred font */
-        font-size: 14px; /* Set preferred font size */
-        line-height: 1.5; /* Set preferred line height */
-        width: 100%;
-      }
-      .header {
-        position: relative;
-      }
-
-      .nav-item {
-        position: absolute;
-        right: 20px; /* Adjust as needed */
-        top: 20px; /* Adjust as needed */
-        padding: 10px; /* Adjust padding as needed */
-      }
-      .nav-item:hover {
-        transform: translate(10px, 10px);
-        text-decoration: none; /* Remove underline */
-        color: #343a40;
-      }
-      .label {
-        font-size: 32px; /* Increased font size */
-        font-weight: bold; /* Make the font bold */
-        transition: transform 0.2s ease-in-out; /* Added transition for hover effect */
-        color: white;
-      }
-
-      .label:hover {
-        transform: translateY(-5px); /* Move the label up slightly on hover */
-        transform: translateX(5px);
-      }
-      .box-title {
-        position: relative; /* Add position relative to enable absolute positioning for the button */
-        padding: 20px; /* Increased padding for a larger box */
-        border-radius: 16px; /* Adjusted border radius */
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Added box shadow */
-        transition: transform 0.2s ease-in-out; /* Added transition for hover effect */
-        background-color: #343a40;
-      }
-
-      .box-title:hover {
-        transform: translateY(-5px); /* Move the box up slightly on hover */
-      }
-      .container {
-        position: relative; /* Make the container a positioned parent */
-      }
-      .button-container {
-        position: absolute; /* Position the button container absolutely */
-        top: calc(10px); /* Position the button below the box */
-        right: 10px; /* Adjust right position as needed */
-        transition: transform 0.2s ease-in-out; /* Added transition for hover effect */
-      }
-
-      .button-container:hover {
-        transform: translateX(
-          20px
-        ); /* Move the button to the right slightly on hover */
-      }
-      body {
-        background-color: #c7c5ce; /* Set the body background color */
-        padding: 0.5%;
-      }
-      
-    </style>
+    <title>Centered Form</title>
+    <link rel="stylesheet" href="static/styles.css" />
   </head>
-  <body>    <div class="space-padding" style="--padding-amount: 20px"></div>
-
-    <div class="container">
-
-      <form method="post" action="/login">
-<div class="form-container box">
-      <form method="POST" class="mb-3 w-full">
-        <div class="mb-3 w-full">
-          <label for="name" class="label-style"> UserName </label>
-          <input
-            type="text"
-            id="user_name"
-            name="user_name"
-            placeholder="User Name"
-            class="w-full px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm border-0 shadow outline-none focus:outline-none focus:ring item-move"
-          />
-        </div>
-
-        <div class="mb-3 w-full">
-          <label for="password" class="label-style">Password </label>
-
-          <input
-            type="password"
-            id="password"
-            name="password"
-            placeholder="Password"
-            class="w-full px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm border-0 shadow outline-none focus:outline-none focus:ring item-move"
-          /><button  class ="bg-indigo-500 text-white active:bg-indigo-600 font-bold uppercase text-xs px-4 py-2 rounded shadow hover:shadow-md outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150" type="submit">Login</button>
-        </div>
+  <body>
+    <div style="padding: 0px"></div>
+    <div class="form-container">
+      <form>
+        <h2>Login</h2>
+        <label for="name" class="label-style"> Username </label>
+        <input type="text" id="user_name" placeholder="Username" />
+        <br />
+        <label for="password" class="label-style">Password </label>
+        <input type="password" id="password" placeholder="Password" />
+        <button type="submit">Submit</button>
+        <br />
       </form>
-      </body>
-
+    </div>
+  </body>
 </html>
