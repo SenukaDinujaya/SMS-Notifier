@@ -1,5 +1,5 @@
 from app import create_app, db
-from app.models import User
+from app.models import User, Item
 from werkzeug.security import generate_password_hash
 
 def create_superuser():
@@ -18,4 +18,10 @@ if __name__ == '__main__':
     with app.app_context():
         db.create_all()
         create_superuser()
+        items = Item.query.all()
+        if items!= None:
+            for item in items:
+                item.running = False
+                item.active = False
+            db.session.commit()
     app.run(debug=True)

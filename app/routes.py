@@ -141,17 +141,8 @@ def log_item():
             return redirect(url_for('main.login'))
     else:
         if 'user_id' in session:
-            log_items = Log.query.all()
+            log_items = Log.query.order_by(Log.id.desc()).all()
+
             return render_template('logs.html', log_items = log_items)
         else:    
             return redirect(url_for('main.login'))
-            
-# @bp.route('/')
-# def dashboard():
-#     if 'user_id' in session:
-#         user_id = session['user_id']
-#         user = User.query.get(user_id)
-#         items = Item.query.all()
-#         return render_template('dashboard.html', user=user,items = items)
-#     else:
-#         return redirect(url_for('main.login'))

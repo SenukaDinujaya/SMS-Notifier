@@ -3,50 +3,28 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Centered Form</title>
-    <link rel="stylesheet" href="static/styles.css" />
+    <title>Logs</title>
+    <link rel="stylesheet" href="/static/styles.css" />
   </head>
   <body>
     {%include 'components/header.html' %}
     <div style="padding: 60px 20px 20px"></div>
     <div class="custom-form" style="max-width: 1000px">
-      <h2>Registered Accounts</h2>
+      <h2 style="position: sticky">Logs</h2>
       <table>
         <thead>
           <tr>
-            <th>Name</th>
-            <th>DID</th>
-            <th>Call Duration</th>
-            <th>Running</th>
-            <th>Actions</th>
+            <th>Timestamp</th>
+            <th>Account</th>
+            <th>Log</th>
           </tr>
         </thead>
         <tbody>
-          {% for item in items %}
+          {% for item in log_items %}
           <tr>
-            <td><strong>{{ item.name }}</strong></td>
-            <td>{{ item.did }}</td>
-            <td>{{ item.call_duration }}</td>
-            <td>{{ "Yes" if item.running else "No" }}</td>
-            <td>
-              <div style="display: inline-block">
-                <a href="{{ url_for('main.edit_item', item_id=item.name) }}"
-                  ><button>Edit</button></a
-                >
-                <form
-                  action="{{ url_for('main.run_item', item_id=item.name) }}"
-                  method="POST"
-                  style="display: inline-block"
-                >
-                  <input type="hidden" name="item_id" value="{{ item.name }}" />
-                  {% if item.running %}
-                  <button>Stop</button>
-                  {% else %}
-                  <button>Run</button>
-                  {% endif %}
-                </form>
-              </div>
-            </td>
+            <td>{{ item.timestamp }}</td>
+            <td><strong>{{ item.company }}</strong></td>
+            <td>{{ item.record }}</td>
           </tr>
           {% endfor %}
         </tbody>

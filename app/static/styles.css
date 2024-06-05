@@ -138,3 +138,17 @@ table {
     cursor: pointer; /* Pointer cursor for clickable rows */
     transition: background-color 0.2s ease-in-out;
   }
+  .spinner {
+    border: 8px solid #f3f3f3;
+    border-top: 8px solid #3498db;
+    border-radius: 50%;
+    width: 10px;
+    height: 10px;
+    animation: spin 2s linear infinite;
+    margin: 5px auto;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}

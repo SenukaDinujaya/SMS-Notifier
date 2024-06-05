@@ -3,6 +3,7 @@ from app.core.sender import SMSSender
 from app.models import Item
 from time import sleep,time
 import threading
+
 #SMS Sender Session
 class Run:
     def __init__(self, item:Item) -> None:
@@ -25,7 +26,7 @@ class Run:
                 self.restart()
 
     def stop(self):
-        # self.logger.send_log([self.item.name,time(),'Stopped'])
+        sleep(1)
         self.run_it = False
 
 
