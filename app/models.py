@@ -19,3 +19,8 @@ class Item(db.Model):
 
     def __repr__(self):
         return '<Item %r>' % self.name
+    
+class Logs(db.Model):
+    name = db.Column(db.String(100),primary_key=True)
+    timestamp = db.Column(db.Float())
+    record = db.Column(db.Text)

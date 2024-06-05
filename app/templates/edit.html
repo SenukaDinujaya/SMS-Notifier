@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Centered Form</title>
+    <link rel="stylesheet" href="/static/styles.css" />
+  </head>
+  <body>
+    {%include 'components/header.html' %}
+    <div>
+      <div class="form-container " style="width: 100%"">
+      <div class="custom-form">
+        <form method="POST">
+          <h2>Edit Account</h2>
+          <label for="email">Email Address:</label>
+          <input
+            required
+            type="email"
+            name="new_item_name"
+            value="{{ item.name }}"
+            placeholder="Enter the email address"
+          />
+          <br />
+          <label for="password">API Password:</label>
+          <input
+            required
+            type="password"
+            name="new_password"
+            value="{{ item.password }}"
+            placeholder="Enter the Password"
+          />
+          <br />
+          <label for="phone">DID Number:</label>
+          <input
+            type="tel"
+            name="new_did"
+            value="{{ item.did }}"
+            placeholder="Enter phone number"
+          />
+          <br />
+          <label for="call-duration">Call Duration:</label>
+          <input
+            type="number"
+            name="new_call_duration"
+            value="{{ item.call_duration }}"
+            placeholder="Maximum call duration"
+          />
+          <br />
+          <label for="message">Message:</label>
+          <textarea
+            name="new_message"
+            placeholder="Type the message to display upon the missed call"
+          >
+{{ item.message }}</textarea
+          >
+          <br />
+          <button type="submit" name="action" value="update">Update</button>
+        </form>
+        <br />
+        <div>
+          <form
+            method="POST"
+            action="/delete/{{ item.name}}"
+            style="max-width: 100px"
+          >
+            <input type="hidden" name="_method" value="DELETE" />
+            <button type="submit">Delete</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

@@ -9,13 +9,12 @@
   <body>
     <div style="padding: 0px"></div>
     <div class="form-container">
-      <form>
+      <form method="POST" class="custom-form">
         <h2>Login</h2>
-        <label for="name" class="label-style"> Username </label>
-        <input type="text" id="user_name" placeholder="Username" />
-        <br />
+        <label for="user_name" class="label-style"> Username </label>
+        <input type="text" name="user_name" placeholder="Username" /> <br />
         <label for="password" class="label-style">Password </label>
-        <input type="password" id="password" placeholder="Password" />
+        <input type="password" name="password" placeholder="Password" />
         <button type="submit">Submit</button>
         <br />
       </form>

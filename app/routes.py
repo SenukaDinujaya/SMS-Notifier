@@ -44,7 +44,7 @@ def create_item():
         message = request.form['message']
         did = request.form['did']
         call_duration = request.form['call_duration']
-        timezone_diff = request.form['timezone_diff']
+        timezone_diff = -1
 
         new_item = Item(
             name=name,
@@ -74,7 +74,7 @@ def edit_item(item_id):
         item.message = request.form['new_message']
         item.did = request.form['new_did']
         item.call_duration = request.form['new_call_duration']
-        item.timezone_diff = request.form['new_timezone_diff']
+        item.timezone_diff = -1
         item.active = False
         item.running = False
         thread_manager.remove_thread(item_id)
