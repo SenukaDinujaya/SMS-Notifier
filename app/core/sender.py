@@ -1,7 +1,7 @@
 from datetime import datetime, timezone
 from voipms.api import Client,VoipException
 from app.core.utils.extended_voipms import ExtendedSMS
-# from app.core.extended_voipms import ExtendedSMS
+from app.core.utils.log import LogSender
 from time import sleep,time
 from collections import deque
 import pandas as pd
@@ -22,6 +22,7 @@ class SMSSender:
         self.delayed_minutes = delayed_minutes# Voip.ms sometimes takes time to register the call so I'm checking last 3 mins instead of the last minute
         self.log_history = deque([], maxlen=log_length)
         self.timezone_diff = timezone_diff
+        self.logger = LogSender()
 
     def auth(self) -> None:
         #Authenticate the client with Voip.ms API
@@ -83,7 +84,7 @@ class SMSSender:
 
     def log(self,log_item):
         if self.log_it:
-            print(int(time()),"::|     ",log_item)
+            self.logger.send_log([self.email,time(),log_item])
         self.log_history.append(log_item)
 
 

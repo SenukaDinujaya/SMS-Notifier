@@ -1,13 +1,13 @@
+from app.core.utils.log import LogSender
 from app.core.sender import SMSSender
 from app.models import Item
-from time import sleep
+from time import sleep,time
 import threading
-
 #SMS Sender Session
 class Run:
     def __init__(self, item:Item) -> None:
         self.run_it = True
-
+        self.logger = LogSender()
         self.sender = SMSSender(
             user_name=item.name,password=item.password,
             sender_did=item.did,call_duration=item.call_duration,
@@ -17,6 +17,7 @@ class Run:
         self.thread.start()
 
     def run(self):
+        self.logger.send_log([self.item.name,time(),'Started'])
         while self.run_it:
             try:    
                 self.sender.run()
@@ -24,13 +25,15 @@ class Run:
                 self.restart()
 
     def stop(self):
+        # self.logger.send_log([self.item.name,time(),'Stopped'])
         self.run_it = False
 
+
     def restart(self):
+        self.logger.send_log([self.item.name,time(),'Restarting'])
         self.stop()
         sleep(5)
         self.run_it = True
-        print('Restarting...')
         self.run()
 
 

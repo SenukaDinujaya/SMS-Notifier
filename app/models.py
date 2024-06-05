@@ -20,7 +20,8 @@ class Item(db.Model):
     def __repr__(self):
         return '<Item %r>' % self.name
     
-class Logs(db.Model):
-    name = db.Column(db.String(100),primary_key=True)
+class Log(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    company = db.Column(db.String(100))
     timestamp = db.Column(db.Float())
     record = db.Column(db.Text)
