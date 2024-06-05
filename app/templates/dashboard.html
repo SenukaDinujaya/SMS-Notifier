@@ -11,6 +11,15 @@
     <div style="padding: 60px 20px 20px"></div>
     <div class="custom-form" style="max-width: 1000px">
       <h2>Registered Accounts</h2>
+      <h4>
+        DayLightSaving: {% if dls %} ON
+        <div class="status-light status-on"></div>
+        <!-- Green Light -->
+        {% else %} OFF
+        <div class="status-light status-off"></div>
+        <!-- Red Light -->
+        {% endif %}
+      </h4>
       <table>
         <thead>
           <tr>

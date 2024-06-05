@@ -1,15 +1,17 @@
-from datetime import datetime, timezone
+from datetime import datetime, timezone, timedelta
 from voipms.api import Client,VoipException
 from app.core.utils.extended_voipms import ExtendedSMS
 from app.core.utils.log import LogSender
+from app.core.utils.dls import DayLightSaving
 from time import sleep,time
 from collections import deque
+from pytz import timezone as tz
 import pandas as pd
 import re
 
 
 class SMSSender:
-    def __init__(self,user_name,password,sender_did,call_duration:int,message,check_interval:int=10,delayed_minutes:int=3,log=False,log_length=100,timezone_diff:int=0) -> None:
+    def __init__(self,user_name,password,sender_did,call_duration:int,message,check_interval:int=10,delayed_minutes:int=3,log=False,log_length=100) -> None:
         self.email = user_name
         self.api_pasword = password
         self.client = None
@@ -21,8 +23,8 @@ class SMSSender:
         self.check_interval = check_interval
         self.delayed_minutes = delayed_minutes# Voip.ms sometimes takes time to register the call so I'm checking last 3 mins instead of the last minute
         self.log_history = deque([], maxlen=log_length)
-        self.timezone_diff = timezone_diff
         self.logger = LogSender()
+        self.dls = DayLightSaving()
 
     def auth(self) -> None:
         #Authenticate the client with Voip.ms API
@@ -72,9 +74,10 @@ class SMSSender:
     
     def datetime_to_epoch(self,datetime_str):
         # Convert datetime to epoch time
+        eastern = tz('America/Toronto')
         dt_object = datetime.strptime(datetime_str, '%Y-%m-%d %H:%M:%S')
-        dt_object_utc = dt_object.replace(tzinfo=timezone.utc)
-        epoch_time = dt_object_utc.timestamp()
+        dt_object_eastern = eastern.localize(dt_object)
+        epoch_time = dt_object_eastern.timestamp()
         
         return int(epoch_time)
         
@@ -116,11 +119,16 @@ class SMSSender:
                         # self.log(f"SMS Sent to {caller_id} called at {last_record_time}")
 
     def run(self):
-        #Removed the while loop since it will go in the app.py
-        today_date = datetime.utcfromtimestamp(time()).strftime('%Y-%m-%d')
+        time_zone = -5
+
+        utc_now = datetime.now(timezone.utc)
+        toronto_timezone = tz('America/Toronto')
+        toronto_time = utc_now.astimezone(toronto_timezone)
+        
+        today_date = toronto_time.strftime('%Y-%m-%d')
         params = {'date_from': today_date,
                     'date_to': today_date,
-                    'timezone':self.timezone_diff,
+                    'timezone': time_zone,
                     'answered':1,
                     'noanswer':1,
                     'busy':1,

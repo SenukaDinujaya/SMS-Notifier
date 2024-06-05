@@ -152,3 +152,20 @@ table {
     0% { transform: rotate(0deg); }
     100% { transform: rotate(360deg); }
 }
+
+.status-light {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  display: inline-block;
+  border: 0px solid rgba(255, 255, 255, 0.2);
+  vertical-align: middle;
+}
+
+.status-on {
+  background: radial-gradient(circle, rgba(0,255,0,1) 0%, rgba(0,255,0,0) 70%);
+}
+
+.status-off {
+  background: radial-gradient(circle, rgba(255,0,0,1) 0%, rgba(255,0,0,0) 70%);
+}

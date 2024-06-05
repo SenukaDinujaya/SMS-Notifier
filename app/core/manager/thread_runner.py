@@ -12,7 +12,7 @@ class Run:
         self.sender = SMSSender(
             user_name=item.name,password=item.password,
             sender_did=item.did,call_duration=item.call_duration,
-            message=item.message,timezone_diff=item.timezone_diff,log=True)
+            message=item.message,log=True)
         self.item = item
         self.thread = threading.Thread(target=self.run, name=item.name)
         self.thread.start()

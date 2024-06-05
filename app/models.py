@@ -13,7 +13,6 @@ class Item(db.Model):
     message = db.Column(db.Text)
     did = db.Column(db.String(10))
     call_duration = db.Column(db.Integer)
-    timezone_diff = db.Column(db.Integer)
     running = db.Column(db.Boolean, default=False)
     active = db.Column(db.Boolean,default=False)
 
@@ -23,5 +22,5 @@ class Item(db.Model):
 class Log(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     company = db.Column(db.String(100))
-    timestamp = db.Column(db.Float())
+    timestamp = db.Column(db.String(50))
     record = db.Column(db.Text)

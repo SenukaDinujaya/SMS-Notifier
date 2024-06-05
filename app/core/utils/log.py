@@ -15,3 +15,4 @@ class LogSender:
                 print(f"Failed to send log. Status code: {response.status_code}")
         except Exception as e:
             print(f"An error occurred while sending log: {e}")
+            

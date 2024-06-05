@@ -1,12 +1,16 @@
 from flask import Flask, render_template, request, redirect, url_for, session, Blueprint, jsonify
 from werkzeug.security import check_password_hash, generate_password_hash
 from app.core.manager.thread_manager import Manager
+from app.core.utils.dls import DayLightSaving
+from app.core.utils.epoch_to_dt import EpochToDateTime
 from app.models import Item, User,Log
 from app.config import Config
 from . import db
 bp = Blueprint('main', __name__)
 
 thread_manager = Manager()
+dls = DayLightSaving()
+epoch_to_datetime = EpochToDateTime()
 
 @bp.route('/login', methods=['GET', 'POST'])
 def login():
@@ -33,7 +37,7 @@ def dashboard():
         user_id = session['user_id']
         user = User.query.get(user_id)
         items = Item.query.all()
-        return render_template('dashboard.html', user=user,items = items)
+        return render_template('dashboard.html', user=user,items = items, dls= dls.is_dst_in_toronto())
     else:
         return redirect(url_for('main.login'))
     
@@ -46,7 +50,6 @@ def create_item():
             message = request.form['message']
             did = request.form['did']
             call_duration = request.form['call_duration']
-            timezone_diff = -1
 
             new_item = Item(
                 name=name,
@@ -54,7 +57,6 @@ def create_item():
                 message=message,
                 did=did,
                 call_duration=call_duration,
-                timezone_diff=timezone_diff,
                 running=False,
                 active=False
             )
@@ -79,7 +81,6 @@ def edit_item(item_id):
             item.message = request.form['new_message']
             item.did = request.form['new_did']
             item.call_duration = request.form['new_call_duration']
-            item.timezone_diff = -1
             item.active = False
             item.running = False
             thread_manager.remove_thread(item_id)
@@ -130,7 +131,7 @@ def log_item():
         if Config.LOG_TOKEN == data[3]:
             new_log = Log(
                 company = data[0],
-                timestamp = data[1],
+                timestamp = epoch_to_datetime.epoch_to_datetime(data[1]),
                 record = data[2]
             )
 
