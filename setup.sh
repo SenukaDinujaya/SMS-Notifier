@@ -9,6 +9,7 @@ VENV_DIR="$APP_DIR/venv"
 REQUIREMENTS_FILE="$APP_DIR/requirements.txt"
 NGINX_CONFIG_FILE="/etc/nginx/sites-available/SMS-Notifier"
 NGINX_ENABLED_FILE="/etc/nginx/sites-enabled/SMS-Notifier"
+DOMAIN_OR_IP=$(curl -s ifconfig.co)
 
 echo "Installing SMS-Notifier..."
 
@@ -59,7 +60,7 @@ echo "Creating Nginx configuration file..."
 cat <<EOL | sudo tee $NGINX_CONFIG_FILE
 server {
     listen 80;
-    server_name your_domain_or_IP;
+    server_name $DOMAIN_OR_IP;
 
     location / {
         proxy_pass http://127.0.0.1:5000;
