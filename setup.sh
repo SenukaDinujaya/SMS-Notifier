@@ -34,7 +34,7 @@ SECRET_KEY=$(cat /dev/urandom | tr -dc 'a-zA-Z0-9' | fold -w 20 | head -n 1)
 LOG_TOKEN=$(cat /dev/urandom | tr -dc 'a-zA-Z0-9' | fold -w 20 | head -n 1)
 
 # Update config.py with the generated strings
-cat << EOF > SMS-Notifier/app/config.py
+cat << EOF > /app/config.py
 class Config:
     DEBUG = True  # Set to False for production
     SECRET_KEY = '$SECRET_KEY'
