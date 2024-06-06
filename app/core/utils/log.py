@@ -3,7 +3,7 @@ from app.config import Config
 class LogSender:
 
     def __init__(self) -> None:
-        self.log_endpoint = 'http://localhost:5000/log'
+        self.log_endpoint = 'http://localhost:8000/log'
 
 
     def send_log(self, data:list):
