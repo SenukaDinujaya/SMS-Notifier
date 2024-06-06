@@ -13,6 +13,7 @@ def create_superuser():
         print("Superuser created successfully!")
 
 app = create_app()
+app.config['PERMANENT_SESSION_LIFETIME'] = 1800
 
 if __name__ == '__main__':
     with app.app_context():
@@ -24,4 +25,4 @@ if __name__ == '__main__':
                 item.running = False
                 item.active = False
             db.session.commit()
-    app.run(debug=True)
+    print("App is starting...")

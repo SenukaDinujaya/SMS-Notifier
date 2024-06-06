@@ -2,14 +2,9 @@
 
 # Activate the Virtual environment
 source venv/bin/activate
-#!/bin/bash
 
-# Start a new screen session
-screen -dmS Notifier
+#Run the before first request
+python3 app.py
 
-# Send the command to run your Python app in the screen session
-clear
-screen -S Notifier -X stuff "python3 run.py$(printf \\r)"
-
-# Attach to the screen session to interact with the Python app
-screen -r Notifier
+# Start the server
+gunicorn -w 4 -b 127.0.0.1:8000 wsgi:app
