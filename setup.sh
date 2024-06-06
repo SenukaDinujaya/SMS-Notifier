@@ -4,19 +4,13 @@
 set -e
 
 # Define variables
-REPO_URL="your_git_repo_url_here"
-APP_DIR="/home/SMS-Notifier"
-CLONE_DIR= "/home"
+APP_DIR="$(pwd)"
 VENV_DIR="$APP_DIR/venv"
 REQUIREMENTS_FILE="$APP_DIR/requirements.txt"
 NGINX_CONFIG_FILE="/etc/nginx/sites-available/SMS-Notifier"
-NGINX_ENABLED_FILE="/etc/nginx/sites-enabled/SMS-Notifiers"
+NGINX_ENABLED_FILE="/etc/nginx/sites-enabled/SMS-Notifier"
 
 echo "Installing SMS-Notifier..."
-
-# Clone the Flask app repository from GitHub
-echo "Cloning repository..."
-git clone $REPO_URL $CLONE_DIR
 
 # Install virtualenv if not installed
 echo "Installing virtualenv..."
@@ -33,6 +27,27 @@ source $VENV_DIR/bin/activate
 # Install required packages from requirements.txt
 echo "Installing required packages..."
 pip3 install -r $REQUIREMENTS_FILE
+
+# Generate random strings for SECRET_KEY and LOG_TOKEN
+echo "Creating config.py with the API Tokens..."
+SECRET_KEY=$(cat /dev/urandom | tr -dc 'a-zA-Z0-9' | fold -w 20 | head -n 1)
+LOG_TOKEN=$(cat /dev/urandom | tr -dc 'a-zA-Z0-9' | fold -w 20 | head -n 1)
+
+# Update config.py with the generated strings
+cat << EOF > SMS-Notifier/app/config.py
+class Config:
+    DEBUG = True  # Set to False for production
+    SECRET_KEY = '$SECRET_KEY'
+    SQLALCHEMY_DATABASE_URI = 'sqlite:///app.db'
+    LOG_TOKEN = '$LOG_TOKEN'
+EOF
+
+echo "Config.py created successfully."
+
+
+# Deactivating the Virtual ENV
+deactivate
+echo "Deactivataed the virtual environment..."
 
 # Install Nginx
 echo "Installing Nginx..."
