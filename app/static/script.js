@@ -1,13 +1,28 @@
-document.getElementById('runButton').addEventListener('click', function() {
-    var spinnerContainer = document.getElementById('spinnerContainer');
+function disablePage() {
+    var overlay = document.createElement("div");
+    overlay.className = "overlay";
     
-    // Remove existing spinner if any
-    spinnerContainer.innerHTML = '';
-
-    // Create the spinner div
-    var spinner = document.createElement('div');
-    spinner.className = 'spinner';
-
-    // Add the spinner to the container
-    spinnerContainer.appendChild(spinner);
-});
+    var spinner = document.createElement("div");
+    spinner.className = "spinner";
+    overlay.appendChild(spinner);
+    
+    document.body.appendChild(overlay);
+  }
+  
+  document.addEventListener("DOMContentLoaded", function () {
+    var runButtons = document.querySelectorAll("button[data-action='run']");
+    var stopButtons = document.querySelectorAll("button[data-action='stop']");
+    
+    runButtons.forEach(function (button) {
+      button.addEventListener("click", function () {
+        disablePage();
+      });
+    });
+    
+    stopButtons.forEach(function (button) {
+      button.addEventListener("click", function () {
+        disablePage();
+      });
+    });
+  });
+  

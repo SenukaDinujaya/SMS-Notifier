@@ -8,6 +8,7 @@
   </head>
   <body>
     {%include 'components/header.html' %}
+    <!-- <div class="overlay" id="overlay"></div> -->
     <div style="padding: 60px 20px 20px"></div>
     <div class="custom-form" style="max-width: 1000px">
       <h2>Registered Accounts</h2>
@@ -20,7 +21,7 @@
         <!-- Red Light -->
         {% endif %}
       </h4>
-      <table>
+      <table id="table" name="table">
         <thead>
           <tr>
             <th>Account</th>
@@ -51,9 +52,9 @@
                 >
                   <input type="hidden" name="item_id" value="{{ item.name }}" />
                   {% if item.running %}
-                  <button>Stop</button>
+                  <button onclick="disablePage()">Stop</button>
                   {% else %}
-                  <button>Run</button>
+                  <button onclick="disablePage()">Run</button>
                   {% endif %}
                 </form>
               </div>
@@ -66,7 +67,7 @@
         id="spinnerContainer"
         style="display: inline-block; vertical-align: middle"
       ></div>
-      <script src="static/script.js"></script>
     </div>
+    <script src="static/script.js"></script>
   </body>
 </html>

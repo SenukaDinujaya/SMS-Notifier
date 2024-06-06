@@ -139,20 +139,20 @@ table {
     transition: background-color 0.2s ease-in-out;
   }
   .spinner {
-    border: 8px solid #f3f3f3;
-    border-top: 8px solid #3498db;
+    border: 16px solid #f3f3f3; /* Increase border width */
+    border-top: 16px solid #3498db; /* Increase border width */
     border-radius: 50%;
-    width: 10px;
-    height: 10px;
+    width: 80px; /* Increase width */
+    height: 80px; /* Increase height */
     animation: spin 2s linear infinite;
-    margin: 5px auto;
-}
-
-@keyframes spin {
+    margin: 20% auto; /* Adjust margin to center vertically and horizontally */
+  }
+  
+  @keyframes spin {
     0% { transform: rotate(0deg); }
     100% { transform: rotate(360deg); }
-}
-
+  }
+  
 .status-light {
   width: 20px;
   height: 20px;
@@ -168,4 +168,15 @@ table {
 
 .status-off {
   background: radial-gradient(circle, rgba(255,0,0,1) 0%, rgba(255,0,0,0) 70%);
+}
+
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: transparent;
+  z-index: 9999; /* Ensure the overlay is on top of everything */
+  pointer-events: auto; /* Enable pointer events to block interaction */
 }

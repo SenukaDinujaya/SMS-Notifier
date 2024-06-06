@@ -5,8 +5,9 @@ from time import sleep,time
 import threading
 
 #SMS Sender Session
-class Run:
+class Run(threading.Thread):
     def __init__(self, item:Item) -> None:
+        super().__init__()
         self.run_it = True
         self.logger = LogSender()
         self.sender = SMSSender(
@@ -15,7 +16,7 @@ class Run:
             message=item.message,log=True)
         self.item = item
         self.thread = threading.Thread(target=self.run, name=item.name)
-        self.thread.start()
+        self.start()
 
     def run(self):
         self.logger.send_log([self.item.name,time(),'Started'])
@@ -35,7 +36,7 @@ class Run:
         self.stop()
         sleep(5)
         self.run_it = True
-        self.run()
+        self.start()
 
 
 # class Run:
