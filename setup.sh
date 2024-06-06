@@ -55,25 +55,30 @@ echo "Installing Nginx..."
 sudo apt update
 sudo apt install -y nginx
 
-# Create Nginx configuration file
-echo "Creating Nginx configuration file..."
-cat <<EOL | sudo tee $NGINX_CONFIG_FILE
-server {
-    listen 80;
-    server_name $DOMAIN_OR_IP;
+# Check if Nginx configuration file already exists
+if [ ! -f "$NGINX_CONFIG_FILE" ]; then
+    # Create Nginx configuration file
+    echo "Creating Nginx configuration file..."
+    sudo tee "$NGINX_CONFIG_FILE" > /dev/null <<EOL
+    server {
+        listen 80;
+        server_name $DOMAIN_OR_IP;
 
-    location / {
-        proxy_pass http://127.0.0.1:8000;
-        proxy_set_header Host \$host;
-        proxy_set_header X-Real-IP \$remote_addr;
-        proxy_set_header X-Forwarded-For \$proxy_add_x_forwarded_for;
+        location / {
+            proxy_pass http://127.0.0.1:8000;
+            proxy_set_header Host \$host;
+            proxy_set_header X-Real-IP \$remote_addr;
+            proxy_set_header X-Forwarded-For \$proxy_add_x_forwarded_for;
+        }
     }
-}
 EOL
+else
+    echo "Nginx configuration file already exists."
+fi
 
 # Enable Nginx configuration by creating a symbolic link
 echo "Enabling Nginx configuration..."
-sudo ln -s $NGINX_CONFIG_FILE $NGINX_ENABLED_FILE
+sudo ln -sf $NGINX_CONFIG_FILE $NGINX_ENABLED_FILE
 
 # Test Nginx configuration
 echo "Testing Nginx configuration..."
