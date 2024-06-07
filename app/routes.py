@@ -94,24 +94,23 @@ def edit_item(item_id):
 
 @bp.route('/run_item/<item_id>', methods=['POST'])
 def run_item(item_id):
-    # Define the function to be executed in a separate thread
-    if 'user_id' in session:
-        item = Item.query.get_or_404(item_id)
-        
-        if request.method == 'POST' and not item.active:
-            item.active = True
-            item.running = True
-            thread_manager.add_thread(item_id,item)
-
-        else:
-            item.active = False
-            item.running = False
-            thread_manager.remove_thread(item_id)
-
-        db.session.commit()
-        return redirect(url_for('main.dashboard'))
-    else:    
+    if 'user_id' not in session:
         return redirect(url_for('main.login'))
+
+    item = Item.query.get_or_404(item_id)
+
+    if request.method == 'POST' and not item.active:
+        item.active = True
+        item.running = True
+        thread_manager.add_thread(item_id, item)
+    else:
+        item.active = False
+        item.running = False
+        thread_manager.remove_thread(item_id)
+
+    db.session.commit()
+    return redirect(url_for('main.dashboard'))
+
     
 @bp.route('/delete/<string:item_id>', methods=['POST'])
 def delete_item(item_id):
