@@ -25,7 +25,8 @@ class SMSSender:
         self.log_history = deque([], maxlen=log_length)
         self.logger = LogSender()
         self.dls = DayLightSaving()
-
+        self.auth()
+        
     def auth(self) -> None:
         #Authenticate the client with Voip.ms API
         self.client = Client(self.email, self.api_pasword)

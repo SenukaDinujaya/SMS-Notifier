@@ -1,6 +1,6 @@
 from flask import Flask, render_template, request, redirect, url_for, session, Blueprint, jsonify
 from werkzeug.security import check_password_hash, generate_password_hash
-from app.core.manager.thread_manager import Manager
+from app.core.manager.manager import Manager
 from app.core.utils.dls import DayLightSaving
 from app.core.utils.epoch_to_dt import EpochToDateTime
 from app.models import Item, User,Log
@@ -95,6 +95,7 @@ def create_item():
 def edit_item(item_id):
     if 'user_id' in session:
         item = Item.query.get_or_404(item_id)
+        thread_manager.stop(item)
         if request.method == 'POST':
             item.name = request.form['new_item_name']
             item.password = request.form['new_password']
@@ -103,7 +104,6 @@ def edit_item(item_id):
             item.call_duration = request.form['new_call_duration']
             item.active = False
             item.running = False
-            thread_manager.remove_thread(item_id)
             db.session.commit()
             return redirect(url_for('main.dashboard'))
 
@@ -123,11 +123,12 @@ def run_item(item_id):
     if request.method == 'POST' and not item.active:
         item.active = True
         item.running = True
-        thread_manager.add_thread(item_id, item)
+        thread_manager.add_to_queue(item)
     else:
         item.active = False
         item.running = False
-        thread_manager.remove_thread(item_id)
+        thread_manager.stop(item)
+
 
     db.session.commit()
     return redirect(url_for('main.dashboard'))
@@ -138,7 +139,7 @@ def run_item(item_id):
 def delete_item(item_id):
     if 'user_id' in session:
         item = Item.query.get_or_404(item_id)
-        thread_manager.remove_thread(item_id)
+        thread_manager.stop(item)
         db.session.delete(item)
         db.session.commit()
         return redirect(url_for('main.dashboard'))
