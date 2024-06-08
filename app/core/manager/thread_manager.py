@@ -1,10 +1,11 @@
 from app.core.manager.thread_runner import Run
 from app.core.utils.log import LogSender
 from time import time,sleep
+from typing import Dict
 
 class Manager:
     def __init__(self):
-        self.threads = {}
+        self.threads: Dict[str, Run] = {}
         self.logger = LogSender()
 
     def add_thread(self, item_id, item):
@@ -17,8 +18,8 @@ class Manager:
     def remove_thread(self, item_id):
         if item_id in self.threads:
             self.threads[item_id].stop()
-            self.logger.send_log([item_id,time(),'Stopped'])
-            sleep(2) # This is tempararay
+            self.threads[item_id].thread.join()
+            self.logger.send_log([item_id,time(),'Stoped'])
             del self.threads[item_id]
 
     def get_thread(self, item_id):
