@@ -38,8 +38,8 @@ class Manager:
                 self.senders[key].run()
             
             elapsed_time = time.time() - start_time
-            if elapsed_time < 5:
-                time.sleep(5 - elapsed_time)
+            if elapsed_time < 10:
+                time.sleep(10 - elapsed_time)
 
     def start_queue(self):
         if not self.running:

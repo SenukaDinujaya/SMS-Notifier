@@ -25,7 +25,6 @@ class SMSSender:
         self.log_history = deque([], maxlen=log_length)
         self.logger = LogSender()
         self.dls = DayLightSaving()
-        self.auth()
         
     def auth(self) -> None:
         #Authenticate the client with Voip.ms API
@@ -117,7 +116,7 @@ class SMSSender:
                         self.send_sms(sms_params,last_record_time)
                         
                         self.history.append(history_item)
-                        # self.log(f"SMS Sent to {caller_id} called at {last_record_time}")
+                        self.log(f"SMS Sent to {caller_id} called at {last_record_time}")
 
     def run(self):
         time_zone = -5
@@ -141,7 +140,6 @@ class SMSSender:
         if not(records.empty):
             self.run_check(records)
 
-        sleep(self.check_interval) 
 
 #Example Use
 # email  = 'voip@sgatechsolutions.com'
