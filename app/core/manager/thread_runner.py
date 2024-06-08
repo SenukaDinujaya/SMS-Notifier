@@ -3,17 +3,19 @@ from app.core.sender import SMSSender
 from app.models import Item
 from time import sleep,time
 import threading
+import copy
 
 #SMS Sender Session
 class Run:
     def __init__(self, item:Item) -> None:
+        
+        self.item = copy.deepcopy(item)
         self.run_it = True
         self.logger = LogSender()
         self.sender = SMSSender(
-            user_name=item.name,password=item.password,
-            sender_did=item.did,call_duration=item.call_duration,
-            message=item.message,log=True)
-        self.item = item
+            user_name=self.item.name,password=self.item.password,
+            sender_did=self.item.did,call_duration=self.item.call_duration,
+            message=self.item.message,log=True)
         self.thread = threading.Thread(target=self.run, name=item.name)
         self.thread.start()
 

@@ -5,12 +5,30 @@ from app.core.utils.dls import DayLightSaving
 from app.core.utils.epoch_to_dt import EpochToDateTime
 from app.models import Item, User,Log
 from app.config import Config
+from functools import wraps
 from . import db
 bp = Blueprint('main', __name__)
 
 thread_manager = Manager()
 dls = DayLightSaving()
 epoch_to_datetime = EpochToDateTime()
+
+
+request_queue = []
+
+def queue_database_modification(func):
+    @wraps(func)
+    def wrapper(*args, **kwargs):
+        # Add incoming request to the queue
+        request_queue.append((func, args, kwargs))
+        # Process all requests in the queue one at a time
+        for queued_func, queued_args, queued_kwargs in request_queue:
+            result = queued_func(*queued_args, **queued_kwargs)
+        # Clear the queue after processing
+        request_queue.clear()
+        return result  # Return the result of the wrapped function
+    return wrapper
+
 
 @bp.route('/login', methods=['GET', 'POST'])
 def login():
@@ -42,6 +60,7 @@ def dashboard():
         return redirect(url_for('main.login'))
     
 @bp.route('/create/', methods=['POST','GET'])
+@queue_database_modification
 def create_item():
     if 'user_id' in session:
         if request.method == 'POST':
@@ -72,6 +91,7 @@ def create_item():
     
 
 @bp.route('/edit/<string:item_id>', methods=['GET', 'POST'])
+@queue_database_modification
 def edit_item(item_id):
     if 'user_id' in session:
         item = Item.query.get_or_404(item_id)
@@ -93,6 +113,7 @@ def edit_item(item_id):
 
 
 @bp.route('/run_item/<item_id>', methods=['POST'])
+@queue_database_modification
 def run_item(item_id):
     if 'user_id' not in session:
         return redirect(url_for('main.login'))
@@ -113,6 +134,7 @@ def run_item(item_id):
 
     
 @bp.route('/delete/<string:item_id>', methods=['POST'])
+@queue_database_modification
 def delete_item(item_id):
     if 'user_id' in session:
         item = Item.query.get_or_404(item_id)
@@ -124,6 +146,7 @@ def delete_item(item_id):
         return redirect(url_for('main.login'))
 
 @bp.route('/log/', methods=['POST','GET'])
+@queue_database_modification
 def log_item():
     if request.method == 'POST':
         data = request.get_json().get('data')
