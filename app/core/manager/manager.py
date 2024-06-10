@@ -28,18 +28,22 @@ class Manager:
             self.start_queue()
         self.log_sender.send_log([item.name, time.time(), 'Started'])
 
-        
-
-
     def __run_queue__(self):
-        while self.senders and self.running:
-            start_time = time.time()
-            for key in list(self.senders.keys()):
-                self.senders[key].run()
-            
-            elapsed_time = time.time() - start_time
-            if elapsed_time < 10:
-                time.sleep(10 - elapsed_time)
+        try:
+            self.log_sender.send_log(['Thread', time.time(), 'Started'])
+            while self.senders and self.running:
+                start_time = time.time()
+                for key in list(self.senders.keys()):
+                    self.senders[key].run()
+                
+                elapsed_time = time.time() - start_time
+                if elapsed_time < 10:
+                    time.sleep(10 - elapsed_time)
+        except Exception as e:
+            self.log_sender.send_log(['Thread', time.time(), e])
+        finally:
+            self.log_sender.send_log(['Thread', time.time(), 'Stoped'])
+
 
     def start_queue(self):
         if not self.running:
