@@ -1,6 +1,6 @@
 from flask import Flask, render_template, request, redirect, url_for, session, Blueprint, jsonify
 from werkzeug.security import check_password_hash, generate_password_hash
-from app.core.manager.manager import Manager
+from app.core.manager.manager_2 import Manager
 from app.core.utils.dls import DayLightSaving
 from app.core.utils.epoch_to_dt import EpochToDateTime
 from app.models import Item, User,Log

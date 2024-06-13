@@ -1,5 +1,5 @@
 from app.core.sender import SMSSender
-from threading import Thread
+from threading import Thread, Lock
 from app.models import Item
 from app.core.utils.log import LogSender
 from typing import Dict
@@ -14,8 +14,8 @@ class Manager:
         self.running = False
         self.log_sender = LogSender()
         self.queue_thread = None
-        self.watchdog_thread = Thread(target=self.__watchdog__, daemon=True)
-        self.watchdog_thread.start()
+        self.restarter = None
+        self.restart_lock = Lock()
 
     def add_to_queue(self, item: Item):
         item = copy.deepcopy(item)
@@ -24,24 +24,28 @@ class Manager:
             password=item.password,
             message=item.message,
             sender_did=item.did,
-            call_duration=item.call_duration,
+            call_duration=item.call_duration
         )
         
         if not self.running:
-            self.start_queue()
+            self.__start_queue__()
         self.log_sender.send_log([item.name, time.time(), 'Started'])
 
     def __run_queue__(self):
         try:
             self.log_sender.send_log(['Thread', time.time(), 'Started'])
+            loop_time = time.time()
             while self.senders and self.running:
                 start_time = time.time()
                 for key in list(self.senders.keys()):
                     self.senders[key].run()
                 
                 elapsed_time = time.time() - start_time
-                if elapsed_time < 10:
+                if elapsed_time < 10: # Will run it every 10 seconds
                     time.sleep(10 - elapsed_time)
+
+                if time.time() - loop_time > 3600: # Will restart the thread every 1h
+                    self.__start_restarter_thread__()
 
         except Exception as e:
             self.log_sender.send_log(['Thread', time.time(), str(e)])
@@ -49,22 +53,14 @@ class Manager:
         finally:
             self.log_sender.send_log(['Thread', time.time(), 'Stopped'])
 
-    def __watchdog__(self):
-        while True:
-            if self.running and (self.queue_thread is None or not self.queue_thread.is_alive()):
-                self.log_sender.send_log(['Watchdog', time.time(), 'Queue thread stopped, restarting...'])
-                self.running = False
-                self.start_queue()
-            time.sleep(5)
-
-    def start_queue(self):
+    def __start_queue__(self):
         if not self.running:
             self.running = True
             self.queue_thread = Thread(target=self.__run_queue__,daemon=True)
             self.queue_thread.start()
             self.log_sender.send_log(['Queue', time.time(), 'Queue thread started'])
 
-    def stop_queue(self):
+    def __stop_queue__(self):
         self.running = False
         if hasattr(self, 'queue_thread') and self.queue_thread.is_alive():
             self.queue_thread.join()
@@ -75,10 +71,16 @@ class Manager:
             del self.senders[item.name]
             self.log_sender.send_log(['System', time.time(), list(self.senders.keys())])
             if not self.senders:
-                self.stop_queue()
+                self.__stop_queue__()
         self.log_sender.send_log([item.name, time.time(), 'Stopped'])
 
-    def restart_queue_thread(self):  # Not in use
-        self.stop_queue()
+    def __restart_queue_thread__(self):
+        self.__stop_queue__()
         time.sleep(1)
-        self.start_queue()
+        self.__start_queue__()
+
+    def __start_restarter_thread__(self):
+        with self.restart_lock:
+            if self.restarter is None or not self.restarter.is_alive():
+                self.restarter = Thread(target=self.__restart_queue_thread__)
+                self.restarter.start()
