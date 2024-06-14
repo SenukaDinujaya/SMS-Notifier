@@ -3,11 +3,12 @@ from voipms.api import Client,VoipException
 from app.core.utils.extended_voipms import ExtendedSMS
 from app.core.utils.log import LogSender
 from app.core.utils.dls import DayLightSaving
-from time import sleep,time
+from time import time
 from collections import deque
 from pytz import timezone as tz
 import pandas as pd
 import re
+
 
 
 class SMSSender:
@@ -87,11 +88,12 @@ class SMSSender:
 
     def log(self,log_item):
         if self.log_it:
-            self.logger.send_log([self.email,time(),log_item])
-        self.log_history.append(log_item)
+            self.log_history.append(log_item)
+        self.logger.send_log([self.email,time(),log_item])
 
 
     def run_check(self,records:pd.DataFrame)->None:
+        self.logger.send_log([self.email,time(),"Running it"])
 
         # Will return the list of caller ids for the last min
         if not(records.empty):
