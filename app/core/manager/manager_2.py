@@ -69,7 +69,7 @@ class Manager:
     def stop(self, item: Item):
         if item.name in self.senders:
             del self.senders[item.name]
-            self.log_sender.send_log(['System', time.time(), str(list(self.senders.keys()))])
+            self.log_sender.send_log(['System', time.time(), str(item.name)])
             if not self.senders:
                 self.__stop_queue__()
         self.log_sender.send_log([item.name, time.time(), 'Stopped'])
