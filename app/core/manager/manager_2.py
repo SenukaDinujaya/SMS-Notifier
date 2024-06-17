@@ -44,7 +44,7 @@ class Manager:
                 if elapsed_time < 10: # Will run it every 10 seconds
                     time.sleep(10 - elapsed_time)
 
-                if time.time() - loop_time > 3600: # Will restart the thread every 1h
+                if time.time() - loop_time > 3600*6: # Will restart the thread every 1h
                     self.__start_restarter_thread__()
 
         except Exception as e:
@@ -69,7 +69,7 @@ class Manager:
     def stop(self, item: Item):
         if item.name in self.senders:
             del self.senders[item.name]
-            self.log_sender.send_log(['System', time.time(), list(self.senders.keys())])
+            self.log_sender.send_log(['System', time.time(), str(list(self.senders.keys()))])
             if not self.senders:
                 self.__stop_queue__()
         self.log_sender.send_log([item.name, time.time(), 'Stopped'])
