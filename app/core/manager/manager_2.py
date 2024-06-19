@@ -49,6 +49,7 @@ class Manager:
 
         except Exception as e:
             self.log_sender.send_log(['Thread', time.time(), str(e)])
+            self.__start_restarter_thread__()
             
         finally:
             self.log_sender.send_log(['Thread', time.time(), 'Stopped'])
