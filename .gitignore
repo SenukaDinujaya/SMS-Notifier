@@ -104,3 +104,4 @@ dmypy.json
 
 # Ignore the Config.py
 app/config.py
+app/core/test_sender.py

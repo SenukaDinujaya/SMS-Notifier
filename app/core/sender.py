@@ -12,7 +12,7 @@ import re
 
 
 class SMSSender:
-    def __init__(self,user_name,password,sender_did,call_duration:int,message,check_interval:int=10,delayed_minutes:int=3,log=False,log_length=100) -> None:
+    def __init__(self,user_name,password,sender_did,call_duration:int,message,check_interval:int=10,delayed_minutes:int=3,log=False,log_length=100,limit_to_one_DID:bool=False) -> None:
         self.email = user_name
         self.api_pasword = password
         self.client = None
@@ -26,7 +26,8 @@ class SMSSender:
         self.log_history = deque([], maxlen=log_length)
         self.logger = LogSender()
         self.dls = DayLightSaving()
-        
+        self.limit_to_one_DID = limit_to_one_DID
+
     def auth(self) -> None:
         #Authenticate the client with Voip.ms API
         self.client = Client(self.email, self.api_pasword)
@@ -101,12 +102,10 @@ class SMSSender:
             records = self.filter_missed(records)
             for index, record in records.iterrows():
                 last_record_time = self.datetime_to_epoch(record['date'])
-        
                 if self.within_last_min(last_record_time):
                     #Extracting the caller ID
                     caller_id  = str(record['callerid'])
                     caller_id  = self.extract_value_between_tags(caller_id)
-                    
                     if len(caller_id)>10: # Remove +1
                         caller_id = caller_id[-10:]
 
@@ -115,10 +114,13 @@ class SMSSender:
                     if not(history_item in self.history):
                         
                         sms_params={'did':self.did,'dst':caller_id,'message':self.message}
-                        self.send_sms(sms_params,last_record_time)
                         
+                        should_send_sms = not self.limit_to_one_DID or self.did == record['destination']
+                        if should_send_sms:
+                            self.send_sms(sms_params, last_record_time)
+                            self.log(f"SMS Sent to {caller_id} called at {last_record_time}")
+
                         self.history.append(history_item)
-                        self.log(f"SMS Sent to {caller_id} called at {last_record_time}")
 
     def run(self):
         time_zone = -5
@@ -143,12 +145,12 @@ class SMSSender:
             self.run_check(records)
 
 
-#Example Use
+# Example Use
 # email  = 'voip@sgatechsolutions.com'
-# api_password = '7Df#kP2!qzX9'
+# api_password = 'BHJijiwheior6723'
 # message = "Thank you for calling SGA Tech Solutions. If you need immediate assistance, please call 431-478-1200 again and leave a voice message. If this is not urgent, please email us at support@sgatechsolutions.com and we will respond in one business day.\n\nOur business hours are Monday through Friday, 8 AM to 4:30 PM CST."
 # did = '4314780719'
 # call_duration = 15
 # timezone_diff = -1 # if there is not daylight time saving in the host we don't have to worry about this.
-# agent = SMSSender(email,api_password,did,call_duration,message,log=True,timezone_diff=timezone_diff)
+# agent = SMSSender(email,api_password,did,call_duration,message,log=True)
 # agent.run()
