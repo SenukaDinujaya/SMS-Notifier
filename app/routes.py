@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect, url_for, session, Blueprint, jsonify
+from flask import Flask, render_template, request, redirect, url_for, session, Blueprint, jsonify, Response
 from werkzeug.security import check_password_hash, generate_password_hash
 from app.core.manager.manager_2 import Manager
 from app.core.utils.dls import DayLightSaving
@@ -173,3 +173,29 @@ def log_item():
             return render_template('logs.html', log_items = log_items)
         else:    
             return redirect(url_for('main.login'))
+        
+def export(log_items):
+    # Create a CSV response
+    def generate():
+        # Write header
+        yield 'Timestamp,Account,Log\n'
+        for log in log_items:
+            # Write log item rows
+            yield f'{log.timestamp},{log.company},{log.record}\n'
+
+    # Create a response object and specify the content type and headers
+    response = Response(generate(), mimetype='text/csv')
+    response.headers.set("Content-Disposition", "attachment", filename="logs.csv")
+    return response
+
+@bp.route('/export/', methods=['POST','GET'])
+@queue_database_modification
+def export_items():
+    if request.method == 'POST':
+        if 'user_id' in session:
+            log_items = Log.query.order_by(Log.id.desc()).all()
+
+            return export(log_items = log_items)
+        else:    
+            return redirect(url_for('main.login'))
+        

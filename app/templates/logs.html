@@ -10,7 +10,20 @@
     {%include 'components/header.html' %}
     <div style="padding: 60px 20px 20px"></div>
     <div class="custom-form" style="max-width: 1000px">
-      <h2 style="position: sticky">Logs</h2>
+      <h2
+        style="
+          position: sticky;
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+        "
+      >
+        Logs
+        <form action="{{ url_for('main.export_items') }}" method="post">
+          <button type="submit">Export Logs</button>
+        </form>
+      </h2>
+
       <table>
         <thead>
           <tr>
