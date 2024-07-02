@@ -69,7 +69,8 @@ def create_item():
             message = request.form['message']
             did = request.form['did']
             call_duration = request.form['call_duration']
-            limit_to_one_DID = bool(request.form['limit_to_one_DID'])
+            limit_to_one_DID = bool(request.form.get('limit_to_one_DID'))
+            # limit_to_one_DID = bool(False if request.form['limit_to_one_DID'] == None else request.form['limit_to_one_DID'])
 
             new_item = Item(
                 name=name,
