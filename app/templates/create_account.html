@@ -30,6 +30,24 @@
         <label for="phone">DID Number:</label>
         <input type="tel" name="did" placeholder="Enter phone number" />
         <br />
+
+        <div
+          style="display: inline-flex; align-items: center; white-space: nowrap"
+        >
+          <input
+            type="checkbox"
+            name="limit_to_one_DID"
+            id="limit_to_one_DID"
+            style="vertical-align: middle"
+            value="true"
+          />
+          <label for="limit_to_one_DID" style="margin-left: 5px"
+            >Send SMS exclusively to calls received from the specified
+            DID.</label
+          >
+        </div>
+
+        <br />
         <label for="call-duration">Call Duration:</label>
         <input
           type="number"

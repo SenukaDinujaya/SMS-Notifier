@@ -39,6 +39,34 @@
             placeholder="Enter phone number"
           />
           <br />
+
+          <div
+            style="
+              display: inline-flex;
+              align-items: center;
+              white-space: nowrap;
+            "
+          >
+            <input
+              type="checkbox"
+              name="limit_to_one_DID"
+              id="limit_to_one_DID"
+              style="vertical-align: middle"
+              {%
+              if
+              item.limit_to_one_DID
+              %}
+              checked
+              {%
+              endif
+              %}
+            />
+            <label for="limit_to_one_DID" style="margin-left: 5px"
+              >Send SMS exclusively to calls received from the specified
+              DID.</label
+            >
+          </div>
+
           <label for="call-duration">Call Duration:</label>
           <input
             type="number"

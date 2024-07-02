@@ -24,9 +24,10 @@ class Manager:
             password=item.password,
             message=item.message,
             sender_did=item.did,
-            call_duration=item.call_duration
+            call_duration=item.call_duration,
+            limit_to_one_DID=item.limit_to_one_DID
         )
-        
+
         if not self.running:
             self.__start_queue__()
         self.log_sender.send_log([item.name, time.time(), 'Started'])

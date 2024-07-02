@@ -94,8 +94,6 @@ class SMSSender:
 
 
     def run_check(self,records:pd.DataFrame)->None:
-        self.logger.send_log([self.email,time(),"Running it"])
-
         # Will return the list of caller ids for the last min
         if not(records.empty):
             records = self.filter_inbound(records)

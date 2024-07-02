@@ -28,6 +28,7 @@
             <th>DID</th>
             <th>Call Duration</th>
             <th>Running</th>
+            <th>Limited</th>
             <th>Actions</th>
           </tr>
         </thead>
@@ -40,6 +41,7 @@
             <td>{{ item.did }}</td>
             <td>{{ item.call_duration }}</td>
             <td>{{ "Yes" if item.running else "No" }}</td>
+            <td>{{ item.limit_to_one_DID}}</td>
             <td>
               <div style="display: inline-block">
                 <a href="{{ url_for('main.edit_item', item_id=item.name) }}"

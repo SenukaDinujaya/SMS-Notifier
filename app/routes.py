@@ -69,6 +69,7 @@ def create_item():
             message = request.form['message']
             did = request.form['did']
             call_duration = request.form['call_duration']
+            limit_to_one_DID = bool(request.form['limit_to_one_DID'])
 
             new_item = Item(
                 name=name,
@@ -77,7 +78,8 @@ def create_item():
                 did=did,
                 call_duration=call_duration,
                 running=False,
-                active=False
+                active=False,
+                limit_to_one_DID=limit_to_one_DID,
             )
 
             db.session.add(new_item)
@@ -102,6 +104,7 @@ def edit_item(item_id):
             item.message = request.form['new_message']
             item.did = request.form['new_did']
             item.call_duration = request.form['new_call_duration']
+            item.limit_to_one_DID = bool(request.form.get('limit_to_one_DID'))
             item.active = False
             item.running = False
             db.session.commit()

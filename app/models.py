@@ -14,7 +14,8 @@ class Item(db.Model):
     did = db.Column(db.String(10))
     call_duration = db.Column(db.Integer)
     running = db.Column(db.Boolean, default=False)
-    active = db.Column(db.Boolean,default=False)
+    active = db.Column(db.Boolean, default=False)
+    limit_to_one_DID = db.Column(db.Boolean, default=False)
 
     def __repr__(self):
         return '<Item %r>' % self.name
