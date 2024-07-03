@@ -8,7 +8,8 @@ class User(db.Model):
 
 # Items model for store company data
 class Item(db.Model):
-    name = db.Column(db.String(100),primary_key=True)
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(100))
     password  = db.Column(db.String(100))
     message = db.Column(db.Text)
     did = db.Column(db.String(10))

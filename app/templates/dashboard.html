@@ -44,11 +44,11 @@
             <td>{{ item.limit_to_one_DID}}</td>
             <td>
               <div style="display: inline-block">
-                <a href="{{ url_for('main.edit_item', item_id=item.name) }}"
+                <a href="{{ url_for('main.edit_item', item_id=item.id) }}"
                   ><button>Edit</button></a
                 >
                 <form
-                  action="{{ url_for('main.run_item', item_id=item.name) }}"
+                  action="{{ url_for('main.run_item', item_id=item.id) }}"
                   method="POST"
                   style="display: inline-block"
                 >
