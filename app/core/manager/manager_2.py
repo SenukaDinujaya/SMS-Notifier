@@ -10,7 +10,7 @@ import copy
 class Manager:
     
     def __init__(self) -> None:
-        self.senders: Dict[str, SMSSender] = {}
+        self.senders: Dict[int, SMSSender] = {}
         self.running = False
         self.log_sender = LogSender()
         self.queue_thread = None
@@ -19,7 +19,7 @@ class Manager:
 
     def add_to_queue(self, item: Item):
         item = copy.deepcopy(item)
-        self.senders[item.name] = SMSSender(
+        self.senders[item.id] = SMSSender(
             user_name=item.name,
             password=item.password,
             message=item.message,
@@ -70,7 +70,7 @@ class Manager:
 
     def stop(self, item: Item):
         if item.name in self.senders:
-            del self.senders[item.name]
+            del self.senders[item.id]
             self.log_sender.send_log(['System', time.time(), str(item.name)])
             if not self.senders:
                 self.__stop_queue__()
