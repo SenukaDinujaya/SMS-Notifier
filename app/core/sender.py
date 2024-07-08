@@ -55,7 +55,7 @@ class SMSSender:
         else:
             return 'None'
     
-    def filter_inbound(records: pd.DataFrame) -> pd.DataFrame:
+    def filter_inbound(self,records: pd.DataFrame) -> pd.DataFrame:
         # Filter to get only the inbound calls
         inbound_type = ['IN:CAN', 'IN:TOLLFREE']
         return records[records['destination_type'].isin(inbound_type)].reset_index(drop=True)
