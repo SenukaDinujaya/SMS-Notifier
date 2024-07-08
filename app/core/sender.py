@@ -55,10 +55,10 @@ class SMSSender:
         else:
             return 'None'
     
-    def filter_inbound (self,records:pd.DataFrame)->bool:
-        #Filter to get only the inbound calls
-        inbound_type = ['IN:CAN','IN:TOLLFREE']
-        return records[records['destination_type'] in inbound_type].reset_index()
+    def filter_inbound(records: pd.DataFrame) -> pd.DataFrame:
+        # Filter to get only the inbound calls
+        inbound_type = ['IN:CAN', 'IN:TOLLFREE']
+        return records[records['destination_type'].isin(inbound_type)].reset_index(drop=True)
 
     def filter_missed (self,records:pd.DataFrame)->bool:
         #Filter to get calls less than 5 seconds long
