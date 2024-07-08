@@ -57,8 +57,8 @@ class SMSSender:
     
     def filter_inbound (self,records:pd.DataFrame)->bool:
         #Filter to get only the inbound calls
-        inbound_type = 'IN:CAN'
-        return records[records['destination_type']==inbound_type].reset_index()
+        inbound_type = ['IN:CAN','IN:TOLLFREE']
+        return records[records['destination_type'] in inbound_type].reset_index()
 
     def filter_missed (self,records:pd.DataFrame)->bool:
         #Filter to get calls less than 5 seconds long
@@ -139,6 +139,7 @@ class SMSSender:
         self.auth()
 
         records = self.get_history(params)
+        print(records.head())
         if not(records.empty):
             self.run_check(records)
 
