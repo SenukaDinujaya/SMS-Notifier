@@ -115,7 +115,7 @@ class SMSSender:
                         
                         should_send_sms = not self.limit_to_one_DID or self.did == record['destination']
                         if should_send_sms:
-                            self.send_sms(sms_params, last_record_time)
+                            print(self.send_sms(sms_params, last_record_time))
                             self.log(f"SMS Sent to {caller_id} called at {last_record_time}")
 
                         self.history.append(history_item)
@@ -139,7 +139,6 @@ class SMSSender:
         self.auth()
 
         records = self.get_history(params)
-        print(records.head())
         if not(records.empty):
             self.run_check(records)
 
