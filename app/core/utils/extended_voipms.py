@@ -8,3 +8,7 @@ class ExtendedSMS(SMS):
     def send_mms(self, params={}):
         self.method = "sendMMS"
         return self.base.request(self.method, params=params)
+    
+    def send_sms(self, params={}):
+        self.method = "sendSMS"
+        return self.base.request(self.method, params=params)

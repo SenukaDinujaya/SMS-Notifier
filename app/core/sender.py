@@ -67,8 +67,12 @@ class SMSSender:
     def send_sms(self,sms_params,called_at):
         try:
             self.log(f"Sending SMS: {sms_params['dst']} called at:{called_at}")
-            mms = ExtendedSMS(self.client)
-            return mms.send_mms(params=sms_params)
+            if len(self.message)<160:
+                sms = ExtendedSMS(self.client)
+                return sms.send_sms(params=sms_params)
+            else:
+                mms = ExtendedSMS(self.client)
+                return mms.send_mms(params=sms_params)
 
         except:
             self.log('No Number')
