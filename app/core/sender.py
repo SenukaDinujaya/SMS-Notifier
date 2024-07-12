@@ -126,26 +126,27 @@ class SMSSender:
 
     def run(self):
         time_zone = -5
+        try:
+            utc_now = datetime.now(timezone.utc)
+            toronto_timezone = tz('America/Toronto')
+            toronto_time = utc_now.astimezone(toronto_timezone)
+            
+            today_date = toronto_time.strftime('%Y-%m-%d')
+            params = {'date_from': today_date,
+                        'date_to': today_date,
+                        'timezone': time_zone,
+                        'answered':1,
+                        'noanswer':1,
+                        'busy':1,
+                        'failed':1}
+            
+            self.auth()
 
-        utc_now = datetime.now(timezone.utc)
-        toronto_timezone = tz('America/Toronto')
-        toronto_time = utc_now.astimezone(toronto_timezone)
-        
-        today_date = toronto_time.strftime('%Y-%m-%d')
-        params = {'date_from': today_date,
-                    'date_to': today_date,
-                    'timezone': time_zone,
-                    'answered':1,
-                    'noanswer':1,
-                    'busy':1,
-                    'failed':1}
-        
-        self.auth()
-
-        records = self.get_history(params)
-        if not(records.empty):
-            self.run_check(records)
-
+            records = self.get_history(params)
+            if not(records.empty):
+                self.run_check(records)
+        except:
+            self.log(f"RunFailed: {self.email} called at {int(time())}")
 
 # Example Use
 # email  = 'voip@sgatechsolutions.com'
